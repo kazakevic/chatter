@@ -31,6 +31,7 @@ class KeysGenerator extends Controller
            // print_r($keys_str);
 
             $q->key = $keys_str;
+            $q->length = count($keys);
             $qq = $q->save();
             if($qq)
             {
