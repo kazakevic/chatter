@@ -25,12 +25,23 @@ class KeysGenerator extends Controller
 
             $keys = $this->extractKeys($msg, $stopwords);
 
+            usort($keys, function($a, $b) {
+                $difference =  strlen($a) - strlen($b);
+
+                return $difference ?: strcmp($a, $b);
+            });
+
+            $keys = array_reverse($keys);
+            //Get 3 longest keys
+            $keys = array_slice($keys, 0,3, true);
+
 
             $keys_str = implode ("; ", $keys);
             //print_r($keys);
            // print_r($keys_str);
 
             $q->key = $keys_str;
+            $q->main_key = $keys[0];
             $q->length = count($keys);
             $qq = $q->save();
             if($qq)
@@ -45,6 +56,8 @@ class KeysGenerator extends Controller
         }
 
     }
+
+
 
     private function extractKeys($text, $stopwords) {
 

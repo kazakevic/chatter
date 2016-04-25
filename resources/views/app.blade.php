@@ -127,7 +127,7 @@
             $.ajax({
                 type: "POST",
                 headers: { 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content') },
-                url: window.location+'sentence/search',
+                url: window.location+'main/match',
                 data: {message: msg},
                 success: function( res ) {
                     if (res != "")

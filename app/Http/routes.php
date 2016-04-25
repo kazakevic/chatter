@@ -15,5 +15,6 @@ Route::get('/', function () {
     return view('index');
 });
 Route::post('sentence/search', 'SentenceController@search');
+Route::post('main/match', 'MainController@match');
 Route::get('gen/keys', 'KeysGenerator@generate');
 
