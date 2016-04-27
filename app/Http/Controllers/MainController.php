@@ -21,11 +21,11 @@ class MainController extends Controller
     {
         $sentecne = new SentenceController();
 
-
         //get message
         $message = Input::get('message');
         if (!$message)
             return;
+        
 
         //extract keys from messagae
         $keys = $sentecne->getSentenceKeys($message);
@@ -56,7 +56,6 @@ class MainController extends Controller
 
         if($question_id != 0)
         {
-
             //now read asnwer from DB
             $q = Question::find($question_id);
             $answer = Answer::find($q['answer_id']);
@@ -76,6 +75,11 @@ class MainController extends Controller
         }
 
         //Generate and output asnwer
+
+        if(Config::get('botSettings.simulateConversation'))
+            sleep(rand(Config::get('botSettings.simulateDelayMin'),Config::get('botSettings.simulateDelayMax')));
+        if(Config::get('botSettings.addSmiley'))
+            $answer = $answer." :-)";
         echo $answer;
 
     }

@@ -57,10 +57,7 @@ class KeysGenerator extends Controller
 
     }
 
-
-
     private function extractKeys($text, $stopwords) {
-
 
         // Remove line breaks and spaces from stopwords
         $stopwords = array_map(function($x){return trim(mb_strtolower($x));}, $stopwords);

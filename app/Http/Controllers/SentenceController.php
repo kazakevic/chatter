@@ -89,4 +89,31 @@ class SentenceController extends Controller
         return array_filter(array_unique($keywords));
     }
 
+    public function spellCheck($message)
+    {
+        $data = array($message);
+        $data_string = json_encode($data);
+        $ch = curl_init('http://itpu.semantika.lt/Proxy/api/chains/morph');
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $data_string);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+                'Content-Type: application/json',
+                'Content-Length: ' . strlen($data_string))
+        );
+        $result = curl_exec($ch);
+        
+        
+
+    }
+
+    public function clean($string) {
+        //$string = str_replace(' ', '-', $string); // Replaces all spaces with hyphens.
+        $string = preg_replace('/[^\p{L}]/u', ' ', $string); // Removes special chars.
+
+        return strlower($string);
+    }
+
+
+
 }
