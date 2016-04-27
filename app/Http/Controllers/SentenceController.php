@@ -56,7 +56,7 @@ class SentenceController extends Controller
 
     public function generateGreeting()
     {
-        $greetings = array("Laba diena.", "Sveiki.", "Gerą dieną.");
+        $greetings = array("Laba diena. ", "Sveiki. ", "Gerą dieną. ");
         $k = array_rand($greetings);
         return $greetings[$k];
     }
@@ -95,7 +95,7 @@ class SentenceController extends Controller
         if (Config::get('botSettings.simulateConversation'))
             sleep(rand(Config::get('botSettings.simulateDelayMin'), Config::get('botSettings.simulateDelayMax')));
         if (Config::get('botSettings.addSmiley'))
-            $answer = $data . " :-)";
+            $answer = $data . " :-) ";
         echo $answer;
     }
 
@@ -148,5 +148,5 @@ class SentenceController extends Controller
         }
     }
 
-
+    
 }

@@ -15,19 +15,20 @@ use Illuminate\Support\Facades\Input;
 
 class MainController extends Controller
 {
-    
+
     //
     public function match()
     {
+        $answer = "null";
         $sentecne = new SentenceController();
+
 
         //get message
         $message = Input::get('message');
         if (!$message || strlen($message) <= 2)
             return;
 
-        if($sentecne->checkForGreeting($message))
-        {
+        if ($sentecne->checkForGreeting($message)) {
             $sentecne->printAnswer($sentecne->generateGreeting());
 
         }
@@ -35,43 +36,42 @@ class MainController extends Controller
         //extract keys from messagae
         $keys = $sentecne->getSentenceKeys($message);
 
-        usort($keys, function($a, $b) {
-            $difference =  strlen($a) - strlen($b);
+        usort($keys, function ($a, $b) {
+            $difference = strlen($a) - strlen($b);
 
             return $difference ?: strcmp($a, $b);
         });
         $keys = array_reverse($keys);
 
         //Get 3 longest keys
-        $main_keys= array_slice($keys, 0,3, true);
+        $main_keys = array_slice($keys, 0, 3, true);
 
 
         $first_test_id = $this->firstLevel($main_keys);
         $second_test_id = $this->secondLevel($keys);
 
-        if($this->firstLevel($main_keys) != 0)
+        if ($this->firstLevel($main_keys) != 0)
             $question_id = $this->firstLevel($main_keys);
-        else if($this->secondLevel($keys) !=0)
+        else if ($this->secondLevel($keys) != 0)
             $question_id = $this->secondLevel($keys);
-        else
-        {
+        else {
             $question_id = 0;
         }
 
 
-        if($question_id != 0)
-        {
+        if ($question_id != 0) {
             //now read asnwer from DB
             $q = Question::find($question_id);
-            $answer = Answer::find($q['answer_id']);
 
-            $answer = $answer['answer'];
-        }
-        else
-        {
+            if ($q->answer_id == 0) {
+                $answer = "null";
+            } else {
+                $ans = Answer::where('id', $q->answer_id)->first();
+                $answer = $ans->answer;
+            }
+        } else {
             //check if it's a question
-            if($sentecne->checkForQuestion($message) || $sentecne->checkForQuestionMark($message))
-            {
+            if ($sentecne->checkForQuestion($message) || $sentecne->checkForQuestionMark($message)) {
                 //Write questio to database
                 $q = new Question();
                 $q->question = $message;
@@ -79,12 +79,14 @@ class MainController extends Controller
 
             }
             //Need method to make answer if not answerr for question is found
-            $answer = "0";
         }
 
         //Generate and output asnwer
-        if($answer != 0)
-        $sentecne->printAnswer($answer);
+        if ($answer == "null") {
+            echo $message."- Ką tai reiškia?";
+        } else {
+            $sentecne->printAnswer($answer);
+        }
 
     }
 
@@ -119,7 +121,7 @@ class MainController extends Controller
         if (!empty($match_count)) {
             $max_value = max($match_count);
 
-            if($max_value >= Config::get('botSettings.minKeysToMatch')) {
+            if ($max_value >= Config::get('botSettings.minKeysToMatch')) {
                 $question_id = array_search($max_value, $match_count);
             }
         }
@@ -156,7 +158,7 @@ class MainController extends Controller
         if (!empty($match_count)) {
             $max_value = max($match_count);
 
-            if($max_value >= Config::get('botSettings.minKeysToMatch')) {
+            if ($max_value >= Config::get('botSettings.minKeysToMatch')) {
                 $question_id = array_search($max_value, $match_count);
             }
         }
