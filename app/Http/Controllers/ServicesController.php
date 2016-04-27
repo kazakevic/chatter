@@ -15,4 +15,11 @@ class ServicesController extends Controller
         $xml = simplexml_load_file($url);
         return $xml->Result->Description;
     }
+
+    public function getLtWikiDescription($key)
+    {
+        $url = 'https://lt.wikipedia.org/w/api.php?format=xml&action=query&prop=extracts&exintro=&explaintext=&titles=' . urlencode($key);
+        $str = file_get_contents($url);
+        return $str;
+    }
 }

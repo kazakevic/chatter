@@ -19,6 +19,7 @@ class MainController extends Controller
     //
     public function match()
     {
+
         $answer = "null";
         $sentecne = new SentenceController();
         $serv = new ServicesController();
@@ -28,6 +29,7 @@ class MainController extends Controller
         $message = Input::get('message');
         if (!$message || strlen($message) <= 2)
             return;
+
 
         if ($sentecne->checkForGreeting($message)) {
             $sentecne->printAnswer($sentecne->generateGreeting());
@@ -67,7 +69,7 @@ class MainController extends Controller
             if ($q->answer_id == 0) {
                 if ($sentecne->checkForKasTai($message)) {
                     $key = $sentecne->getKasTaiKey($message);
-                    $answer = $serv->getWikiDescription($key);
+                    $answer = $serv->getLtWikiDescription($key);
                 } else {
                     $answer = "null";
                 }
@@ -85,7 +87,7 @@ class MainController extends Controller
 
                 if ($sentecne->checkForKasTai($message)) {
                     $key = $sentecne->getKasTaiKey($message);
-                    $answer = $serv->getWikiDescription($key);
+                    $answer = $serv->getLtWikiDescription($key);
                 }
 
 

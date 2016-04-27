@@ -160,6 +160,7 @@ class SentenceController extends Controller
     {
         $str = strtolower($str);
         $s = explode("kas tai", $str);
-        return $s[1];
+        $key = preg_replace('/[-?]/', '', $s[1]);
+        return $key;
     }
 }

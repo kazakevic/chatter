@@ -17,7 +17,7 @@ return  [
     'simulateDelayMin' => 5,
     'simulateDelayMax' => 10,
     'addSmiley' => true,
-    'enableSpeelCheck' => true
+    'enableLithuanianWiki' => true
 
 
 ];
