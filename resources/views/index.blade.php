@@ -22,7 +22,7 @@
                         </div>
                         <div class="button maximize"></div>
                     </div>
-                    <div class="title">Chat</div>
+                    <div class="title">Virtualus pašnekovas</div>
                 </div>
                 <ul class="messages">
                 </ul>

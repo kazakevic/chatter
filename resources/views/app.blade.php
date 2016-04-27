@@ -145,7 +145,7 @@
             margin-top: -2px;
         }
         .messages .message .text_wrapper .text {
-            font-size: 18px;
+            font-size: 12px;
             font-weight: 300;
         }
 

@@ -53,6 +53,7 @@ class SentenceController extends Controller
         else
             return false;
     }
+
     public function generateGreeting()
     {
         $greetings = array("Laba diena.", "Sveiki.", "Gerą dieną.");
@@ -89,6 +90,15 @@ class SentenceController extends Controller
         return array_filter(array_unique($keywords));
     }
 
+    public function printAnswer($data)
+    {
+        if (Config::get('botSettings.simulateConversation'))
+            sleep(rand(Config::get('botSettings.simulateDelayMin'), Config::get('botSettings.simulateDelayMax')));
+        if (Config::get('botSettings.addSmiley'))
+            $answer = $data . " :-)";
+        echo $answer;
+    }
+
     public function spellCheck($message)
     {
         $data = array($message);
@@ -102,18 +112,41 @@ class SentenceController extends Controller
                 'Content-Length: ' . strlen($data_string))
         );
         $result = curl_exec($ch);
-        
-        
 
     }
 
-    public function clean($string) {
+    public function clean($string)
+    {
         //$string = str_replace(' ', '-', $string); // Replaces all spaces with hyphens.
         $string = preg_replace('/[^\p{L}]/u', ' ', $string); // Removes special chars.
 
         return strlower($string);
     }
 
+    public function checkForQuestion($msg)
+    {
+        {
+            $keys = array();
+            $quest = Identificator::where('identity', 'question')->get();
+            foreach ($quest as $g) {
+                $keys[] = $g->key;
+            }
+
+            if ($this->contains($msg, $keys))
+                return true;
+            else
+                return false;
+        }
+    }
+
+    public function checkForQuestionMark($msg)
+    {
+        if (strpos($msg, '?') !== false) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
 
 }

@@ -25,7 +25,11 @@ class MainController extends Controller
         $message = Input::get('message');
         if (!$message)
             return;
-        
+        if($sentecne->checkForGreeting($message))
+        {
+            $sentecne->printAnswer($sentecne->generateGreeting());
+
+        }
 
         //extract keys from messagae
         $keys = $sentecne->getSentenceKeys($message);
@@ -61,26 +65,25 @@ class MainController extends Controller
             $answer = Answer::find($q['answer_id']);
 
             $answer = $answer['answer'];
-
-            //check if this first question and if it have greeting key
-            if ($sentecne->checkForGreeting($message))
-                $answer = $sentecne->generateGreeting() . $answer;
-            else
-                $answer = $answer;
         }
         else
         {
+            //check if it's a question
+            if($sentecne->checkForQuestion($message) || $sentecne->checkForQuestionMark($message))
+            {
+                //Write questio to database
+                $q = new Question();
+                $q->question = $message;
+                $q->save();
+
+            }
             //Need method to make answer if not answerr for question is found
-            $answer = "Prašome palaukti, mes tiksliname informaciją.";
+            $answer = "Prašome palaukti, informacija tikslinama.";
         }
 
         //Generate and output asnwer
 
-        if(Config::get('botSettings.simulateConversation'))
-            sleep(rand(Config::get('botSettings.simulateDelayMin'),Config::get('botSettings.simulateDelayMax')));
-        if(Config::get('botSettings.addSmiley'))
-            $answer = $answer." :-)";
-        echo $answer;
+        $sentecne->printAnswer($answer);
 
     }
 
