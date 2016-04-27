@@ -21,6 +21,7 @@ class MainController extends Controller
     {
         $answer = "null";
         $sentecne = new SentenceController();
+        $serv = new ServicesController();
 
 
         //get message
@@ -64,7 +65,12 @@ class MainController extends Controller
             $q = Question::find($question_id);
 
             if ($q->answer_id == 0) {
-                $answer = "null";
+                if ($sentecne->checkForKasTai($message)) {
+                    $key = $sentecne->getKasTaiKey($message);
+                    $answer = $serv->getWikiDescription($key);
+                } else {
+                    $answer = "null";
+                }
             } else {
                 $ans = Answer::where('id', $q->answer_id)->first();
                 $answer = $ans->answer;
@@ -72,10 +78,16 @@ class MainController extends Controller
         } else {
             //check if it's a question
             if ($sentecne->checkForQuestion($message) || $sentecne->checkForQuestionMark($message)) {
-                //Write questio to database
+                //Write question to DB
                 $q = new Question();
                 $q->question = $message;
                 $q->save();
+
+                if ($sentecne->checkForKasTai($message)) {
+                    $key = $sentecne->getKasTaiKey($message);
+                    $answer = $serv->getWikiDescription($key);
+                }
+
 
             }
             //Need method to make answer if not answerr for question is found

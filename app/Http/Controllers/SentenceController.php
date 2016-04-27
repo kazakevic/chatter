@@ -148,5 +148,18 @@ class SentenceController extends Controller
         }
     }
 
-    
+    public function checkForKasTai($str)
+    {
+        if (strpos($str, 'kas tai') !== false) {
+            return true;
+        } else
+            return false;
+    }
+
+    public function getKasTaiKey($str)
+    {
+        $str = strtolower($str);
+        $s = explode("kas tai", $str);
+        return $s[1];
+    }
 }
