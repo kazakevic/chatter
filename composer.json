@@ -39,6 +39,7 @@
         "post-install-cmd": [
             "Illuminate\\Foundation\\ComposerScripts::postInstall",
             "php artisan optimize"
+
         ],
         "post-update-cmd": [
             "Illuminate\\Foundation\\ComposerScripts::postUpdate",
@@ -47,5 +48,8 @@
     },
     "config": {
         "preferred-install": "dist"
+    },
+    "require": {
+        "laravelcollective/html": "~5.0"
     }
 }

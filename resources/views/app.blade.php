@@ -272,7 +272,7 @@
                 }
                 $('.message_input').val('');
                 $messages = $('.messages');
-                message_side = message_side === 'left' ? 'right' : 'left';
+               // message_side = message_side === 'left' ? 'right' : 'left';
                 message = new Message({
                     text: text,
                     message_side: message_side
@@ -322,10 +322,12 @@
 
 
                     client.on('chat message', function(msg){
+                        message_side = 'left';
                        sendMessage(msg);
                     });
 
                     client.on('reply', function (msg) {
+                        message_side = 'right';
                         sendMessage(msg);
                     });
                 } catch(e){

@@ -17,4 +17,7 @@ Route::get('/', function () {
 Route::post('sentence/search', 'SentenceController@search');
 Route::post('main/match', 'MainController@match');
 Route::get('gen/keys', 'KeysGenerator@generate');
+Route::get('admin/questions', 'Admin@showQuestions');
+Route::get('admin/question/{id}/answer', 'Admin@answer');
+Route::post('admin/answer/save', 'Admin@answerSave');
 

@@ -23,8 +23,9 @@ class MainController extends Controller
 
         //get message
         $message = Input::get('message');
-        if (!$message)
+        if (!$message || strlen($message) <= 2)
             return;
+
         if($sentecne->checkForGreeting($message))
         {
             $sentecne->printAnswer($sentecne->generateGreeting());
@@ -78,11 +79,11 @@ class MainController extends Controller
 
             }
             //Need method to make answer if not answerr for question is found
-            $answer = "Prašome palaukti, informacija tikslinama.";
+            $answer = "0";
         }
 
         //Generate and output asnwer
-
+        if($answer != 0)
         $sentecne->printAnswer($answer);
 
     }
