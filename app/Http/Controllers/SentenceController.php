@@ -17,6 +17,18 @@ use Illuminate\Support\Facades\Input;
 class SentenceController extends Controller
 {
     private $match_ratio = 0;
+    private $answer = "null";
+
+
+    public function setAsnwer($str)
+    {
+        $this->answer = $str;
+    }
+
+    public function getAnswer()
+    {
+        return $this->answer;
+    }
 
     //returns array of sentence keys
     public function getSentenceKeys($sentence)
@@ -96,7 +108,8 @@ class SentenceController extends Controller
             sleep(rand(Config::get('botSettings.simulateDelayMin'), Config::get('botSettings.simulateDelayMax')));
         if (Config::get('botSettings.addSmiley'))
             $answer = $data . " :-) ";
-        echo $answer;
+        $this->setAsnwer($answer);
+        echo $this->getAnswer();
     }
 
     public function spellCheck($message)

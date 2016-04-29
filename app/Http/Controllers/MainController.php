@@ -20,7 +20,7 @@ class MainController extends Controller
     public function match()
     {
 
-        $answer = "null";
+        //$answer = "null";
         $sentecne = new SentenceController();
         $serv = new ServicesController();
 
@@ -32,8 +32,8 @@ class MainController extends Controller
 
 
         if ($sentecne->checkForGreeting($message)) {
-            $sentecne->printAnswer($sentecne->generateGreeting());
-
+            $sentecne->setAsnwer($sentecne->generateGreeting());
+            // $sentecne->printAnswer($sentecne->generateGreeting());
         }
 
         //extract keys from messagae
@@ -69,13 +69,13 @@ class MainController extends Controller
             if ($q->answer_id == 0) {
                 if ($sentecne->checkForKasTai($message)) {
                     $key = $sentecne->getKasTaiKey($message);
-                    $answer = $serv->getLtWikiDescription($key);
+                    $sentecne->setAsnwer($serv->getLtWikiDescription($key));
                 } else {
-                    $answer = "null";
+                    $sentecne->setAsnwer("null");
                 }
             } else {
                 $ans = Answer::where('id', $q->answer_id)->first();
-                $answer = $ans->answer;
+                $sentecne->setAsnwer($ans->answer);
             }
         } else {
             //check if it's a question
@@ -87,7 +87,7 @@ class MainController extends Controller
 
                 if ($sentecne->checkForKasTai($message)) {
                     $key = $sentecne->getKasTaiKey($message);
-                    $answer = $serv->getLtWikiDescription($key);
+                    $sentecne->setAsnwer($serv->getLtWikiDescription($key));
                 }
 
 
@@ -96,10 +96,10 @@ class MainController extends Controller
         }
 
         //Generate and output asnwer
-        if ($answer == "null") {
+        if ($sentecne->getAnswer() == "null") {
             echo $message."- Ką tai reiškia?";
         } else {
-            $sentecne->printAnswer($answer);
+            $sentecne->printAnswer($sentecne->getAnswer());
         }
 
     }
