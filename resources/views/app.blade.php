@@ -212,7 +212,12 @@
 
 <nav class="navbar navbar-default navbar-static-top">
     <div class="container">
-        ...
+        <?php if (Auth::check()) { ?>
+        <a href="{{ url('/logout') }}">
+            <button type="button" class="btn btn-default navbar-btn">Logout</button>
+        </a>
+
+        <?php } ?>
     </div>
 </nav>
 <div class="container">

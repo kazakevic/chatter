@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Question;
 use App\Answer;
+use App\Identificator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Config;
 
@@ -14,6 +15,20 @@ use Illuminate\Support\Facades\Input;
 class Admin extends Controller
 {
     //
+    public function index()
+    {
+        //get info
+        $data = array(
+            'notAnswered' => Question::where('answer_id', 0)->count(),
+            'answered' => Question::where('answer_id', '!=', 0)->count(),
+            'totalQuestions' => Question::all()->count(),
+            'totalIdent' => Identificator::all()->count()
+        );
+
+        return view('admin/index', $data);
+    }
+
+
     public function showQuestions()
     {
         $data = array(
@@ -22,14 +37,18 @@ class Admin extends Controller
         return view('admin/questions', $data);
 
     }
-    public function answer($id)
+
+    public
+    function answer($id)
     {
         $data = array(
             'qid' => $id
         );
         return view('admin/writeAnswer', $data);
     }
-    public function answerSave()
+
+    public
+    function answerSave()
     {
         $answer = Input::get('answer');
         $q_id = Input::get('qid');
