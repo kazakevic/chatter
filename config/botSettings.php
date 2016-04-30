@@ -10,7 +10,9 @@
 return  [
 //How much keywords should match to give answer from database
     //how much keys should match to gvie answer
-    'minKeysToMatch' => 3,
+    'minKeysToMatch' => 2,
+    //1 - 100% keys/sentence keys
+    'minMatchValue' => 0.6,
     //enables delay before send asnwer
     'simulateConversation' => false,
     //delay in seconds

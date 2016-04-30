@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50624
 File Encoding         : 65001
 
-Date: 2016-04-27 23:03:33
+Date: 2016-04-29 16:39:03
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -25,7 +25,7 @@ CREATE TABLE `answers` (
   `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of answers
@@ -43,29 +43,73 @@ CREATE TABLE `identificators` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `key` varchar(255) DEFAULT NULL,
   `identity` varchar(255) DEFAULT NULL,
+  `state` varchar(255) DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of identificators
 -- ----------------------------
-INSERT INTO `identificators` VALUES ('1', 'labas', 'greeting');
-INSERT INTO `identificators` VALUES ('2', 'sveikas', 'greeting');
-INSERT INTO `identificators` VALUES ('3', 'sveiki', 'greeting');
-INSERT INTO `identificators` VALUES ('4', 'laba diena', 'greeting');
-INSERT INTO `identificators` VALUES ('5', 'gerą dieną', 'greeting');
-INSERT INTO `identificators` VALUES ('6', 'kas', 'question');
-INSERT INTO `identificators` VALUES ('7', 'kur', 'question');
-INSERT INTO `identificators` VALUES ('8', 'kada', 'question');
-INSERT INTO `identificators` VALUES ('9', 'kaip', 'question');
-INSERT INTO `identificators` VALUES ('10', 'kelintas', 'question');
-INSERT INTO `identificators` VALUES ('11', 'kiek', 'question');
-INSERT INTO `identificators` VALUES ('12', 'koks', 'question');
-INSERT INTO `identificators` VALUES ('13', 'kokia', 'question');
-INSERT INTO `identificators` VALUES ('14', 'kelinta', 'question');
-INSERT INTO `identificators` VALUES ('15', 'kelintą', 'question');
-INSERT INTO `identificators` VALUES ('16', 'kokią', 'question');
-INSERT INTO `identificators` VALUES ('17', 'ką', 'question');
+INSERT INTO `identificators` VALUES ('1', 'labas', 'greeting', '0');
+INSERT INTO `identificators` VALUES ('2', 'sveikas', 'greeting', '0');
+INSERT INTO `identificators` VALUES ('3', 'sveiki', 'greeting', '0');
+INSERT INTO `identificators` VALUES ('4', 'laba diena', 'greeting', '0');
+INSERT INTO `identificators` VALUES ('5', 'gerą dieną', 'greeting', '0');
+INSERT INTO `identificators` VALUES ('6', 'kas', 'question', '0');
+INSERT INTO `identificators` VALUES ('7', 'kur', 'question', '0');
+INSERT INTO `identificators` VALUES ('8', 'kada', 'question', '0');
+INSERT INTO `identificators` VALUES ('9', 'kaip', 'question', '0');
+INSERT INTO `identificators` VALUES ('10', 'kelintas', 'question', '0');
+INSERT INTO `identificators` VALUES ('11', 'kiek', 'question', '0');
+INSERT INTO `identificators` VALUES ('12', 'koks', 'question', '0');
+INSERT INTO `identificators` VALUES ('13', 'kokia', 'question', '0');
+INSERT INTO `identificators` VALUES ('14', 'kelinta', 'question', '0');
+INSERT INTO `identificators` VALUES ('15', 'kelintą', 'question', '0');
+INSERT INTO `identificators` VALUES ('16', 'kokią', 'question', '0');
+INSERT INTO `identificators` VALUES ('17', 'ką', 'question', '0');
+INSERT INTO `identificators` VALUES ('18', 'lochas', 'angry', 'psichologic');
+INSERT INTO `identificators` VALUES ('19', 'kurva', 'angry', 'psichologic');
+INSERT INTO `identificators` VALUES ('20', 'pyderas', 'angry', 'psichologic');
+INSERT INTO `identificators` VALUES ('21', 'pydaras', 'angry', 'psichologic');
+INSERT INTO `identificators` VALUES ('22', 'blt', 'angry', 'psichologic');
+INSERT INTO `identificators` VALUES ('23', 'blet', 'angry', 'psichologic');
+INSERT INTO `identificators` VALUES ('24', 'nx', 'angry', 'psichologic');
+INSERT INTO `identificators` VALUES ('25', 'suka', 'angry', 'psichologic');
+INSERT INTO `identificators` VALUES ('26', 'naxuj', 'angry', 'psichologic');
+INSERT INTO `identificators` VALUES ('27', 'nachuj', 'angry', 'psichologic');
+INSERT INTO `identificators` VALUES ('28', 'pizdiec', 'angry', 'psichologic');
+INSERT INTO `identificators` VALUES ('29', 'pzdc', 'angry', 'psichologic');
+
+-- ----------------------------
+-- Table structure for migrations
+-- ----------------------------
+DROP TABLE IF EXISTS `migrations`;
+CREATE TABLE `migrations` (
+  `migration` varchar(255) NOT NULL,
+  `batch` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of migrations
+-- ----------------------------
+INSERT INTO `migrations` VALUES ('2014_10_12_000000_create_users_table', '1');
+INSERT INTO `migrations` VALUES ('2014_10_12_100000_create_password_resets_table', '1');
+
+-- ----------------------------
+-- Table structure for password_resets
+-- ----------------------------
+DROP TABLE IF EXISTS `password_resets`;
+CREATE TABLE `password_resets` (
+  `email` varchar(255) NOT NULL,
+  `token` varchar(255) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  KEY `password_resets_email_index` (`email`),
+  KEY `password_resets_token_index` (`token`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of password_resets
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for questions
@@ -81,7 +125,7 @@ CREATE TABLE `questions` (
   `length` int(11) DEFAULT '0',
   `main_key` varchar(255) DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of questions
@@ -94,6 +138,31 @@ INSERT INTO `questions` VALUES ('5', 'Ką tu?', 'ką; tu', '4', '0000-00-00 00:0
 INSERT INTO `questions` VALUES ('11', 'kas tai namas?', '0', '0', '2016-04-27 19:53:32', '2016-04-27 19:53:32', '0', '0');
 INSERT INTO `questions` VALUES ('12', 'kas tai f22?', '0', '0', '2016-04-27 19:59:59', '2016-04-27 19:59:59', '0', '0');
 INSERT INTO `questions` VALUES ('13', 'kas tai wall street?', '0', '0', '2016-04-27 20:00:14', '2016-04-27 20:00:14', '0', '0');
+INSERT INTO `questions` VALUES ('15', 'kas tai shizofrenia', '0', '0', '2016-04-27 21:23:22', '2016-04-27 21:23:22', '0', '0');
+INSERT INTO `questions` VALUES ('16', 'kas tai maroco', '0', '0', '2016-04-27 21:23:28', '2016-04-27 21:23:28', '0', '0');
+INSERT INTO `questions` VALUES ('17', 'kas tai pica?', '0', '0', '2016-04-27 21:49:08', '2016-04-27 21:49:08', '0', '0');
+INSERT INTO `questions` VALUES ('18', 'kas tai amerika?', '0', '0', '2016-04-27 21:49:20', '2016-04-27 21:49:20', '0', '0');
+INSERT INTO `questions` VALUES ('19', 'kas tai čipsai?', '0', '0', '2016-04-28 12:27:45', '2016-04-28 12:27:45', '0', '0');
+INSERT INTO `questions` VALUES ('21', 'kas tai kebabas?', '0', '0', '2016-04-29 12:05:08', '2016-04-29 12:05:08', '0', '0');
+INSERT INTO `questions` VALUES ('22', 'sveikas', '0', '0', '2016-04-29 12:38:38', '2016-04-29 12:38:38', '0', '0');
+INSERT INTO `questions` VALUES ('23', 'Ką tu?', '0', '0', '2016-04-29 12:59:08', '2016-04-29 12:59:08', '0', '0');
+
+-- ----------------------------
+-- Table structure for random_pairs
+-- ----------------------------
+DROP TABLE IF EXISTS `random_pairs`;
+CREATE TABLE `random_pairs` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `pair` varchar(255) DEFAULT NULL,
+  `id_key` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of random_pairs
+-- ----------------------------
+INSERT INTO `random_pairs` VALUES ('1', 'Laba diena, Sveiki, Gerą dieną', 'polite_greeting');
+INSERT INTO `random_pairs` VALUES ('2', 'Sveikas, Labas', 'friend_greet');
 
 -- ----------------------------
 -- Table structure for shot_questions
@@ -124,3 +193,24 @@ CREATE TABLE `stopwords` (
 -- ----------------------------
 INSERT INTO `stopwords` VALUES ('1', 'ar');
 INSERT INTO `stopwords` VALUES ('2', 'į');
+
+-- ----------------------------
+-- Table structure for users
+-- ----------------------------
+DROP TABLE IF EXISTS `users`;
+CREATE TABLE `users` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `remember_token` varchar(100) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `users_email_unique` (`email`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of users
+-- ----------------------------
+INSERT INTO `users` VALUES ('1', 'admin', 'adminas@test.lt', '$2y$10$glLudViTi/KDRL1qIYqfO.05sThxhZ.clllM0E5rbsr/DGsZC5wN.', '8jlbhHuq5vzb4UnuTNfu6GOvoNJZnQpAIpROFIDc7KTAA9FDJnPpGKdAecsX', '2016-04-28 18:46:19', '2016-04-29 11:20:52');

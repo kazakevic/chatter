@@ -38,8 +38,7 @@ class Admin extends Controller
 
     }
 
-    public
-    function answer($id)
+    public function answer($id)
     {
         $data = array(
             'qid' => $id
@@ -47,8 +46,7 @@ class Admin extends Controller
         return view('admin/writeAnswer', $data);
     }
 
-    public
-    function answerSave()
+    public function answerSave()
     {
         $answer = Input::get('answer');
         $q_id = Input::get('qid');

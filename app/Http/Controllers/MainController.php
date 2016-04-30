@@ -50,15 +50,42 @@ class MainController extends Controller
         $main_keys = array_slice($keys, 0, 3, true);
 
 
-        $first_test_id = $this->firstLevel($main_keys);
-        $second_test_id = $this->secondLevel($keys);
+        $dat = array(
+            'keys' => $keys,
+            'main_keys' => $main_keys,
+            'size' => count($keys),
+            'message' => $message
+        );
 
-        if ($this->firstLevel($main_keys) != 0)
-            $question_id = $this->firstLevel($main_keys);
-        else if ($this->secondLevel($keys) != 0)
-            $question_id = $this->secondLevel($keys);
-        else {
-            $question_id = 0;
+        $sentecne->setQuestionData($dat);
+
+        $question = (object)$sentecne->getQuestionData();
+
+
+        $first_test_id = $this->firstLevel($question->main_keys);
+        $second_test_id = $this->secondLevel($question->keys);
+
+        $first = (object)$this->firstLevel($question->main_keys);
+        $second = (object)$this->secondLevel($question->keys);
+
+
+        //if message is short use first method
+        if ($question->size <= 5) {
+            $first = (object)$this->firstLevel($question->main_keys);
+            if ($first->match_count >= Config::get('botSettings.minKeysToMatch')) {
+                $question_id = $first->question_id;
+            } else {
+                $question_id = 0;
+            }
+
+        } else if ($question->size > 5) {
+            $second = (object)$this->secondLevel($question->keys);
+            $size = $second->match_count / $question->size;
+            if ($size >= Config::get('botSettings.minMatchValue')) {
+                $question_id = $second->question_id;
+            } else {
+                $question_id = 0;
+            }
         }
 
 
@@ -67,8 +94,8 @@ class MainController extends Controller
             $q = Question::find($question_id);
 
             if ($q->answer_id == 0) {
-                if ($sentecne->checkForKasTai($message)) {
-                    $key = $sentecne->getKasTaiKey($message);
+                if ($sentecne->checkForKasTai($question->message)) {
+                    $key = $sentecne->getKasTaiKey($question->message);
                     $sentecne->setAsnwer($serv->getLtWikiDescription($key));
                 } else {
                     $sentecne->setAsnwer("null");
@@ -79,14 +106,14 @@ class MainController extends Controller
             }
         } else {
             //check if it's a question
-            if ($sentecne->checkForQuestion($message) || $sentecne->checkForQuestionMark($message)) {
+            if ($sentecne->checkForQuestion($question->message) || $sentecne->checkForQuestionMark($question->message)) {
                 //Write question to DB
                 $q = new Question();
-                $q->question = $message;
+                $q->question = strtolower($question->message);
                 $q->save();
 
-                if ($sentecne->checkForKasTai($message)) {
-                    $key = $sentecne->getKasTaiKey($message);
+                if ($sentecne->checkForKasTai($question->message)) {
+                    $key = $sentecne->getKasTaiKey($question->message);
                     $sentecne->setAsnwer($serv->getLtWikiDescription($key));
                 }
 
@@ -97,7 +124,7 @@ class MainController extends Controller
 
         //Generate and output asnwer
         if ($sentecne->getAnswer() == "null") {
-            echo $message."- Ką tai reiškia?";
+            echo $question->message . "- Ką tai reiškia?";
         } else {
             $sentecne->printAnswer($sentecne->getAnswer());
         }
@@ -114,6 +141,7 @@ class MainController extends Controller
 
         $match_count = array();
         $question_id = 0;
+        $max_value = 0;
 
         $questions = Question::all();
 
@@ -135,11 +163,19 @@ class MainController extends Controller
         if (!empty($match_count)) {
             $max_value = max($match_count);
 
-            if ($max_value >= Config::get('botSettings.minKeysToMatch')) {
+//            if ($max_value >= Config::get('botSettings.minKeysToMatch')) {
                 $question_id = array_search($max_value, $match_count);
-            }
+//            }
+
         }
-        return $question_id;
+        $data = array(
+
+            'question_id' => $question_id,
+            'match_count' => $max_value
+
+        );
+        return $data;
+        //return $question_id;
 
     }
 
@@ -150,6 +186,7 @@ class MainController extends Controller
 
         $match_count = array();
         $question_id = 0;
+        $max_value = 0;
         $sentecne = new SentenceController();
 
         $questions = Question::all();
@@ -172,11 +209,19 @@ class MainController extends Controller
         if (!empty($match_count)) {
             $max_value = max($match_count);
 
-            if ($max_value >= Config::get('botSettings.minKeysToMatch')) {
+            // if ($max_value >= Config::get('botSettings.minKeysToMatch')) {
                 $question_id = array_search($max_value, $match_count);
-            }
+            //  }
+
         }
-        return $question_id;
+        $data = array(
+
+            'question_id' => $question_id,
+            'match_count' => $max_value
+
+        );
+        // return $question_id;
+        return $data;
 
     }
 

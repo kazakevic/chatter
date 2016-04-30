@@ -9,6 +9,7 @@ use App\StopWord;
 use App\Question;
 use App\Answer;
 use App\Identificator;
+use App\RandomPair;
 
 
 use App\Http\Requests;
@@ -18,7 +19,28 @@ class SentenceController extends Controller
 {
     private $match_ratio = 0;
     private $answer = "null";
+    private $ratio_data = array();
+    private $question_data = array();
 
+    public function setQuestionData($data)
+    {
+        $this->question_data = $data;
+    }
+
+    public function getQuestionData()
+    {
+        return $this->question_data;
+    }
+
+    public function setRatio($ratio_data)
+    {
+        $this->match_ratio = $ratio_data;
+    }
+
+    public function getRatio()
+    {
+        return $this->ratio_data;
+    }
 
     public function setAsnwer($str)
     {
@@ -68,9 +90,14 @@ class SentenceController extends Controller
 
     public function generateGreeting()
     {
-        $greetings = array("Laba diena. ", "Sveiki. ", "Gerą dieną. ");
-        $k = array_rand($greetings);
-        return $greetings[$k];
+        // $gr = array();
+        $greetings = RandomPair::where('id_key', 'polite_greeting')->first();
+
+        $gr = explode(", ", $greetings->pair);
+
+        //$greetings = array("Laba diena. ", "Sveiki. ", "Gerą dieną. ");
+        $k = array_rand($gr);
+        return $gr[$k];
     }
 
     public function extractKeys($text, $stopwords)
