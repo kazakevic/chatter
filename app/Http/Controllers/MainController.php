@@ -107,7 +107,7 @@ class MainController extends Controller
                 //Write question to DB
                 $q = new Question();
                 if (Question::where('question', $question->message)->count() == 0) {
-                    $q->question = strtolower($question->message);
+                    $q->question = mb_strtolower($question->message);
                     $q->save();
                 }
 
