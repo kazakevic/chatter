@@ -62,13 +62,6 @@ class MainController extends Controller
         $question = (object)$sentecne->getQuestionData();
 
 
-        $first_test_id = $this->firstLevel($question->main_keys);
-        $second_test_id = $this->secondLevel($question->keys);
-
-        $first = (object)$this->firstLevel($question->main_keys);
-        $second = (object)$this->secondLevel($question->keys);
-
-
         //if message is short use first method
         if ($question->size <= 5) {
             $first = (object)$this->firstLevel($question->main_keys);
@@ -88,7 +81,7 @@ class MainController extends Controller
             }
         }
 
-
+//if question found
         if ($question_id != 0) {
             //now read asnwer from DB
             $q = Question::find($question_id);
@@ -96,7 +89,11 @@ class MainController extends Controller
             if ($q->answer_id == 0) {
                 if ($sentecne->checkForKasTai($question->message)) {
                     $key = $sentecne->getKasTaiKey($question->message);
-                    $sentecne->setAsnwer($serv->getLtWikiDescription($key));
+
+                    if ($serv->getLtWikiDescription($key) != "")
+                        $sentecne->setAsnwer($serv->getLtWikiDescription($key));
+                    else
+                        $sentecne->setAsnwer("null");
                 } else {
                     $sentecne->setAsnwer("null");
                 }
@@ -109,14 +106,20 @@ class MainController extends Controller
             if ($sentecne->checkForQuestion($question->message) || $sentecne->checkForQuestionMark($question->message)) {
                 //Write question to DB
                 $q = new Question();
-                $q->question = strtolower($question->message);
-                $q->save();
+                if (Question::where('question', $question->message)->count() == 0) {
+                    $q->question = strtolower($question->message);
+                    $q->save();
+                }
 
                 if ($sentecne->checkForKasTai($question->message)) {
                     $key = $sentecne->getKasTaiKey($question->message);
-                    $sentecne->setAsnwer($serv->getLtWikiDescription($key));
-                }
 
+                    if (!empty($serv->getLtWikiDescription($key)) != "")
+                        $sentecne->setAsnwer($serv->getLtWikiDescription($key));
+                    else
+                        $sentecne->setAsnwer("null");
+                } else
+                    $sentecne->setAsnwer("null");
 
             }
             //Need method to make answer if not answerr for question is found
@@ -164,7 +167,7 @@ class MainController extends Controller
             $max_value = max($match_count);
 
 //            if ($max_value >= Config::get('botSettings.minKeysToMatch')) {
-                $question_id = array_search($max_value, $match_count);
+            $question_id = array_search($max_value, $match_count);
 //            }
 
         }
@@ -210,7 +213,7 @@ class MainController extends Controller
             $max_value = max($match_count);
 
             // if ($max_value >= Config::get('botSettings.minKeysToMatch')) {
-                $question_id = array_search($max_value, $match_count);
+            $question_id = array_search($max_value, $match_count);
             //  }
 
         }

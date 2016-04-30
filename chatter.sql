@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50624
 File Encoding         : 65001
 
-Date: 2016-04-29 16:39:03
+Date: 2016-04-30 16:58:41
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -25,7 +25,7 @@ CREATE TABLE `answers` (
   `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of answers
@@ -45,7 +45,7 @@ CREATE TABLE `identificators` (
   `identity` varchar(255) DEFAULT NULL,
   `state` varchar(255) DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of identificators
@@ -125,7 +125,7 @@ CREATE TABLE `questions` (
   `length` int(11) DEFAULT '0',
   `main_key` varchar(255) DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=62 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of questions
@@ -135,17 +135,8 @@ INSERT INTO `questions` VALUES ('2', 'Koks yra Ryanair rankinio bagažo svoris v
 INSERT INTO `questions` VALUES ('3', 'Koks yra Ryanair registruojamo bagažo svoris vienam keleiviui?', 'registruojamo; keleiviui; ryanair', '3', '0000-00-00 00:00:00', '2016-04-25 16:46:24', '3', 'registruojamo');
 INSERT INTO `questions` VALUES ('4', 'Ką veiki?', 'veiki; ką', '4', '0000-00-00 00:00:00', '2016-04-25 22:43:51', '2', 'veiki');
 INSERT INTO `questions` VALUES ('5', 'Ką tu?', 'ką; tu', '4', '0000-00-00 00:00:00', '2016-04-25 22:43:51', '2', 'ką');
-INSERT INTO `questions` VALUES ('11', 'kas tai namas?', '0', '0', '2016-04-27 19:53:32', '2016-04-27 19:53:32', '0', '0');
-INSERT INTO `questions` VALUES ('12', 'kas tai f22?', '0', '0', '2016-04-27 19:59:59', '2016-04-27 19:59:59', '0', '0');
-INSERT INTO `questions` VALUES ('13', 'kas tai wall street?', '0', '0', '2016-04-27 20:00:14', '2016-04-27 20:00:14', '0', '0');
-INSERT INTO `questions` VALUES ('15', 'kas tai shizofrenia', '0', '0', '2016-04-27 21:23:22', '2016-04-27 21:23:22', '0', '0');
-INSERT INTO `questions` VALUES ('16', 'kas tai maroco', '0', '0', '2016-04-27 21:23:28', '2016-04-27 21:23:28', '0', '0');
-INSERT INTO `questions` VALUES ('17', 'kas tai pica?', '0', '0', '2016-04-27 21:49:08', '2016-04-27 21:49:08', '0', '0');
-INSERT INTO `questions` VALUES ('18', 'kas tai amerika?', '0', '0', '2016-04-27 21:49:20', '2016-04-27 21:49:20', '0', '0');
-INSERT INTO `questions` VALUES ('19', 'kas tai čipsai?', '0', '0', '2016-04-28 12:27:45', '2016-04-28 12:27:45', '0', '0');
-INSERT INTO `questions` VALUES ('21', 'kas tai kebabas?', '0', '0', '2016-04-29 12:05:08', '2016-04-29 12:05:08', '0', '0');
-INSERT INTO `questions` VALUES ('22', 'sveikas', '0', '0', '2016-04-29 12:38:38', '2016-04-29 12:38:38', '0', '0');
-INSERT INTO `questions` VALUES ('23', 'Ką tu?', '0', '0', '2016-04-29 12:59:08', '2016-04-29 12:59:08', '0', '0');
+INSERT INTO `questions` VALUES ('60', 'kas tai pica?', '0', '0', '2016-04-30 13:56:24', '2016-04-30 13:56:24', '0', '0');
+INSERT INTO `questions` VALUES ('61', 'kas tai pica', '0', '0', '2016-04-30 13:56:31', '2016-04-30 13:56:31', '0', '0');
 
 -- ----------------------------
 -- Table structure for random_pairs
