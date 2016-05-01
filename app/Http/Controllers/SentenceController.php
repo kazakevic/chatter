@@ -203,4 +203,21 @@ class SentenceController extends Controller
         $key = preg_replace('/[-?]/', '', $s[1]);
         return $key;
     }
+
+    public function replaceLt()
+    {
+
+
+        $replace = [
+            'ą' => 'a',
+            'ę' => 'e',
+            'ė' => 'e',
+            'č' => 'c',
+            'ž' => 'z',
+            'š' => 's',
+            'ų' => 'u',
+            'ū' => 'u'
+        ];
+        $r = str_replace(array_keys($replace), $replace, $string);
+    }
 }
