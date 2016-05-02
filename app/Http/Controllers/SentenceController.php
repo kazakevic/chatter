@@ -204,9 +204,9 @@ class SentenceController extends Controller
         return $key;
     }
 
-    public function replaceLt()
+//Replacing LT characters
+    public function replaceLt($str)
     {
-
 
         $replace = [
             'ą' => 'a',
@@ -216,8 +216,18 @@ class SentenceController extends Controller
             'ž' => 'z',
             'š' => 's',
             'ų' => 'u',
-            'ū' => 'u'
+            'ū' => 'u',
+            'į' => 'i'
         ];
-        $r = str_replace(array_keys($replace), $replace, $string);
+        return str_replace(array_keys($replace), $replace, $str);
+    }
+
+//simple solution to check if string have LT characters
+    public function checkForLt($string)
+    {
+        if ($string != $this->replaceLt($string))
+            return true;
+        else
+            return false;
     }
 }

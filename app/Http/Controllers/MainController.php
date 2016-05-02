@@ -30,7 +30,6 @@ class MainController extends Controller
         if (!$message || strlen($message) <= 2)
             return;
 
-
         if ($sentecne->checkForGreeting($message)) {
             $sentecne->setAsnwer($sentecne->generateGreeting());
             // $sentecne->printAnswer($sentecne->generateGreeting());
@@ -56,7 +55,6 @@ class MainController extends Controller
             'size' => count($keys),
             'message' => $message
         );
-
         $sentecne->setQuestionData($dat);
 
         $question = (object)$sentecne->getQuestionData();
@@ -64,15 +62,14 @@ class MainController extends Controller
 
         //if message is short use first method
         if ($question->size <= 5) {
-            $first = (object)$this->firstLevel($question->main_keys);
+            $first = (object)$this->firstLevel($question->main_keys, $question->message);
             if ($first->match_count >= Config::get('botSettings.minKeysToMatch')) {
                 $question_id = $first->question_id;
             } else {
                 $question_id = 0;
             }
-
         } else if ($question->size > 5) {
-            $second = (object)$this->secondLevel($question->keys);
+            $second = (object)$this->secondLevel($question->keys, $question->message);
             $size = $second->match_count / $question->size;
             if ($size >= Config::get('botSettings.minMatchValue')) {
                 $question_id = $second->question_id;
@@ -134,7 +131,7 @@ class MainController extends Controller
 
     }
 
-    private function firstLevel($main_keys)
+    private function firstLevel($main_keys, $msg)
     {
         //returns ID of question
         //returns 0 if question was not found
@@ -145,13 +142,18 @@ class MainController extends Controller
         $match_count = array();
         $question_id = 0;
         $max_value = 0;
-
+        $sentecne = new SentenceController();
         $questions = Question::all();
+
 
         foreach ($questions as $question) {
 
             //Array of single question
-            $q_keys = explode('; ', $question->key);
+
+            if (!$sentecne->checkForLt($msg))
+                $q_keys = explode('; ', $sentecne->replaceLt($question->key));
+            else
+                $q_keys = explode('; ', $question->key);
 
             //how much same keys found
             $result = array_intersect($main_keys, $q_keys);
@@ -161,7 +163,9 @@ class MainController extends Controller
                 //Count of occurencies for each question
                 $match_count[$question->id] = count($result);
             }
+            //print_r($q_keys);
         }
+
 
         if (!empty($match_count)) {
             $max_value = max($match_count);
@@ -182,7 +186,7 @@ class MainController extends Controller
 
     }
 
-    private function secondLevel($keys)
+    private function secondLevel($keys, $msg)
     {
         //this method compares all extracted keywords
         //without excluded stopwrods
@@ -197,7 +201,13 @@ class MainController extends Controller
         foreach ($questions as $question) {
 
             //Array of single question
-            $q_keys = $sentecne->getSentenceKeys($question->question);
+
+            if (!$sentecne->checkForLt($msg))
+                $q_keys = $sentecne->getSentenceKeys($sentecne->replaceLt($question->question));
+            else
+                $q_keys = $sentecne->getSentenceKeys($question->question);
+
+
 
             //how much same keys found
             $result = array_intersect($keys, $q_keys);
