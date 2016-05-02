@@ -136,7 +136,8 @@ class SentenceController extends Controller
         if (Config::get('botSettings.addSmiley'))
             $answer = $data . " :-) ";
         $this->setAsnwer($answer);
-        echo $this->getAnswer();
+
+        echo $this->showSmiley($this->getAnswer());
     }
 
     public function spellCheck($message)
@@ -218,6 +219,19 @@ class SentenceController extends Controller
             'ų' => 'u',
             'ū' => 'u',
             'į' => 'i'
+        ];
+        return str_replace(array_keys($replace), $replace, $str);
+    }
+
+    public function showSmiley($str)
+    {
+
+
+        $replace = [
+            ':-)' => "<img src='smiley/Mini-Smile.png' />",
+            ':)' => "<img src='smiley/Mini-Smile.png' />",
+
+
         ];
         return str_replace(array_keys($replace), $replace, $str);
     }
