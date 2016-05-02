@@ -129,12 +129,12 @@ class SentenceController extends Controller
         return array_filter(array_unique($keywords));
     }
 
-    public function printAnswer($data)
+    public function printAnswer($str)
     {
         if (Config::get('botSettings.simulateConversation'))
             sleep(rand(Config::get('botSettings.simulateDelayMin'), Config::get('botSettings.simulateDelayMax')));
         if (Config::get('botSettings.addSmiley'))
-            $answer = $data . " :-) ";
+            $answer = $str . " :-) ";
         $this->setAsnwer($answer);
 
         echo $this->showSmiley($this->getAnswer());

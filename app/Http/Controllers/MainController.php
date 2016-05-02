@@ -19,8 +19,6 @@ class MainController extends Controller
     //
     public function match()
     {
-
-        //$answer = "null";
         $sentecne = new SentenceController();
         $serv = new ServicesController();
 
@@ -96,7 +94,10 @@ class MainController extends Controller
                 }
             } else {
                 $ans = Answer::where('id', $q->answer_id)->first();
-                $sentecne->setAsnwer($ans->answer);
+                if ($sentecne->getAnswer() != "null")
+                    $sentecne->setAsnwer($sentecne->getAnswer() . ". " . $ans->answer);
+                else
+                    $sentecne->setAsnwer($ans->answer);
             }
         } else {
             //check if it's a question
@@ -126,6 +127,7 @@ class MainController extends Controller
         if ($sentecne->getAnswer() == "null") {
             echo $question->message . "- Ką tai reiškia?";
         } else {
+
             $sentecne->printAnswer($sentecne->getAnswer());
         }
 
