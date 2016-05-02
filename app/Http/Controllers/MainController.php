@@ -60,21 +60,27 @@ class MainController extends Controller
 
         //if message is short use first method
         if ($question->size <= 5) {
+
             $first = (object)$this->firstLevel($question->main_keys, $question->message);
-            if ($first->match_count >= Config::get('botSettings.minKeysToMatch')) {
+
+            if ($first->match_count >= Config::get('botSettings.minKeysToMatch') && $first->max_match_value >= Config::get('botSettings.minValue')) {
                 $question_id = $first->question_id;
             } else {
                 $question_id = 0;
             }
         } else if ($question->size > 5) {
+
             $second = (object)$this->secondLevel($question->keys, $question->message);
+
             $size = $second->match_count / $question->size;
-            if ($size >= Config::get('botSettings.minMatchValue')) {
+
+            if ($size >= Config::get('botSettings.minMatchValue') && $second->max_match_value >= Config::get('botSettings.minValue')) {
                 $question_id = $second->question_id;
             } else {
                 $question_id = 0;
             }
         }
+
 
 //if question found
         if ($question_id != 0) {
@@ -142,6 +148,7 @@ class MainController extends Controller
         //and first 3 longest keywords
 
         $match_count = array();
+        $match_values = array();
         $question_id = 0;
         $max_value = 0;
         $sentecne = new SentenceController();
@@ -152,11 +159,16 @@ class MainController extends Controller
 
             //Array of single question
 
-            if (!$sentecne->checkForLt($msg))
+            if (!$sentecne->checkForLt($msg)) {
                 $q_keys = explode('; ', $sentecne->replaceLt($question->key));
-            else
+                $quest = $sentecne->replaceLt($question->question);
+            } else {
                 $q_keys = explode('; ', $question->key);
+                $quest = $question->question;
+            }
 
+            similar_text($msg, $quest, $match_value);
+            $match_values[$question->id] = $match_value;
             //how much same keys found
             $result = array_intersect($main_keys, $q_keys);
 
@@ -165,26 +177,30 @@ class MainController extends Controller
                 //Count of occurencies for each question
                 $match_count[$question->id] = count($result);
             }
-            //print_r($q_keys);
         }
 
 
+        //Get the question id by comparing by keywords
         if (!empty($match_count)) {
             $max_value = max($match_count);
 
-//            if ($max_value >= Config::get('botSettings.minKeysToMatch')) {
             $question_id = array_search($max_value, $match_count);
-//            }
-
         }
+        //Get the question id by comparing by similiar text
+        if (!empty($match_values)) {
+            $max_match_value = max($match_values);
+
+            $question_id2 = array_search($max_match_value, $match_values);
+        }
+
         $data = array(
-
-            'question_id' => $question_id,
-            'match_count' => $max_value
-
+            'question_id' => $question_id, //question id by match_count
+            'question_id2' => $question_id2, //question id by max_match_value
+            'match_count' => $max_value,
+            'max_match_value' => $max_match_value
         );
         return $data;
-        //return $question_id;
+
 
     }
 
@@ -194,7 +210,9 @@ class MainController extends Controller
         //without excluded stopwrods
 
         $match_count = array();
+        $match_values = array();
         $question_id = 0;
+        $question_id2 = 0;
         $max_value = 0;
         $sentecne = new SentenceController();
 
@@ -204,12 +222,16 @@ class MainController extends Controller
 
             //Array of single question
 
-            if (!$sentecne->checkForLt($msg))
+            if (!$sentecne->checkForLt($msg)) {
                 $q_keys = $sentecne->getSentenceKeys($sentecne->replaceLt($question->question));
-            else
+                $quest = $sentecne->replaceLt($question->question);
+            } else {
                 $q_keys = $sentecne->getSentenceKeys($question->question);
+                $quest = $question->question;
+            }
 
-
+            similar_text($msg, $quest, $match_value);
+            $match_values[$question->id] = $match_value;
 
             //how much same keys found
             $result = array_intersect($keys, $q_keys);
@@ -229,11 +251,18 @@ class MainController extends Controller
             //  }
 
         }
+        //Get the question id by comparing by similiar text
+        if (!empty($match_values)) {
+            $max_match_value = max($match_values);
+
+            $question_id2 = array_search($max_match_value, $match_values);
+        }
+
         $data = array(
-
-            'question_id' => $question_id,
-            'match_count' => $max_value
-
+            'question_id' => $question_id, //question id by match_count
+            'question_id2' => $question_id2, //question id by max_match_value
+            'match_count' => $max_value,
+            'max_match_value' => $max_match_value
         );
         // return $question_id;
         return $data;
