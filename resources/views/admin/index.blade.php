@@ -34,6 +34,15 @@
                 Total <span class="badge"> {!! $totalIdent !!} </span>
             </button>
 
+            <br/>
+
+            <h3>Functions:</h3>
+            <a href="{{ url('admin/questions') }}">
+                <button class="btn btn-success" type="button">
+                    Generate keys
+                </button>
+            </a>
+
         </div>
 
 

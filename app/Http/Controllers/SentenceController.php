@@ -135,6 +135,7 @@ class SentenceController extends Controller
             sleep(rand(Config::get('botSettings.simulateDelayMin'), Config::get('botSettings.simulateDelayMax')));
         if (Config::get('botSettings.addSmiley'))
             $answer = $str . " :-) ";
+        $answer = $this->make_clickable($answer);
         $this->setAsnwer($answer);
 
         echo $this->showSmiley($this->getAnswer());
@@ -243,5 +244,13 @@ class SentenceController extends Controller
             return true;
         else
             return false;
+    }
+
+    public function make_clickable($text)
+    {
+        $regex = '#\bhttps?://[^\s()<>]+(?:\([\w\d]+\)|([^[:punct:]\s]|/))#';
+        return preg_replace_callback($regex, function ($matches) {
+            return "<a href='$matches[0]'  target=\'_blank\'>{$matches[0]}</a>";
+        }, $text);
     }
 }
