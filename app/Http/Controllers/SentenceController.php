@@ -121,7 +121,7 @@ class SentenceController extends Controller
 
         foreach ($text_array as $term) {
             if (!in_array($term, $stopwords)) {
-                $keywords[] = $term;
+                $keywords[] = metaphone($term);
             }
         };
 
