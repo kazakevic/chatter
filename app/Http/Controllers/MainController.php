@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Input;
 
 class MainController extends Controller
 {
+    private $question_id = 0;
 
     //
     public function match()
@@ -64,28 +65,35 @@ class MainController extends Controller
             $first = (object)$this->firstLevel($question->main_keys, $question->message);
 
             if ($first->match_count >= Config::get('botSettings.minKeysToMatch') && $first->max_match_value >= Config::get('botSettings.minValue')) {
-                $question_id = $first->question_id;
+                $this->question_id = $first->question_id;
             } else {
-                $question_id = 0;
+                //try seconde level bcause words can have other order or other keys
+                $second = (object)$this->secondLevel($question->keys, $question->message);
+                $size = $second->match_count / $question->size;
+
+                if ($second->match_count >= Config::get('botSettings.minKeysToMatch')) {
+                    $this->question_id = $second->question_id;
+                } else {
+                    $this->question_id = 0;
+                }
             }
-        } else if ($question->size > 5) {
+        } else if ($question->size > 5 || $this->question_id == 0) {
 
             $second = (object)$this->secondLevel($question->keys, $question->message);
 
             $size = $second->match_count / $question->size;
 
             if ($size >= Config::get('botSettings.minMatchValue') && $second->max_match_value >= Config::get('botSettings.minValue')) {
-                $question_id = $second->question_id;
+                $this->question_id = $second->question_id;
             } else {
-                $question_id = 0;
+                $this->question_id = 0;
             }
         }
 
-
 //if question found
-        if ($question_id != 0) {
+        if ($this->question_id != 0) {
             //now read asnwer from DB
-            $q = Question::find($question_id);
+            $q = Question::find($this->question_id);
 
             if ($q->answer_id == 0) {
                 if ($sentecne->checkForKasTai($question->message)) {
