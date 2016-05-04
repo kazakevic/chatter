@@ -121,7 +121,10 @@ class SentenceController extends Controller
 
         foreach ($text_array as $term) {
             if (!in_array($term, $stopwords)) {
-                $keywords[] = metaphone($term);
+
+                $d = new DoubleMetaphone($term);
+
+                $keywords[] = $d->primary;
             }
         };
 

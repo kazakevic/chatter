@@ -28,6 +28,7 @@ class MainController extends Controller
         $message = Input::get('message');
         if (!$message || strlen($message) <= 2)
             return;
+        
 
         if ($sentecne->checkForGreeting($message)) {
             $sentecne->setAsnwer($sentecne->generateGreeting());

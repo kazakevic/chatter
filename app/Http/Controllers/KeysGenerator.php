@@ -59,6 +59,7 @@ class KeysGenerator extends Controller
 
     private function extractKeys($text, $stopwords) {
 
+
         // Remove line breaks and spaces from stopwords
         $stopwords = array_map(function($x){return trim(mb_strtolower($x));}, $stopwords);
 
@@ -74,7 +75,10 @@ class KeysGenerator extends Controller
 
         foreach ($text_array as $term) {
             if (!in_array($term, $stopwords)) {
-                $keywords[] = metaphone($term);
+
+                $d = new DoubleMetaphone($term);
+
+                $keywords[] = $d->primary;
             }
         };
 
